@@ -26,9 +26,9 @@ class Model {
   }
 
   get balance() {
-    return this.item.reduce((acc, curr) => (
+    return this.items.reduce((acc, curr) => (
       acc + (curr.type === 'Income' ? curr.amount : -curr.amount
-    )));
+    )), 0);
   }
 }
 
@@ -40,6 +40,7 @@ class Model {
 class View {
   constructor() {
     this.balance = this.getElement('#balance');
+    this.balanceSection = this.getElement('#section-balance');
     this.amountInput = this.getElement('#amount');
     this.descInput = this.getElement('#description');
     this.typeInput = this.getElement('#type');
@@ -78,7 +79,8 @@ class View {
     });
   }
 
-  renderTable(items) {
+  updateView(items, balance) {
+    // Update items table
     this.itemsTable.innerHTML = '';
     for (const item of items) {
       const row = document.createElement('tr');
@@ -109,6 +111,16 @@ class View {
 
       this.itemsTable.appendChild(row);
     }
+
+    // Update balance
+    this.balance.textContent = formatBalance(balance);
+    if (balance === 0) {
+      this.balanceSection.style.backgroundColor = '#616161';
+    } else if (balance > 0) {
+      this.balanceSection.style.backgroundColor = '#388E3C';
+    } else {
+      this.balanceSection.style.backgroundColor = '#D32F2F';
+    }
   }
 }
 
@@ -130,11 +142,13 @@ class Controller {
     this.view.bindAddItem(this.onAddItem);
     this.view.bindOnDelete(this.onDeleteItem);
     this.view.bindAmountInputValidation(this.validateAmountInput);
+
+    // Initialize
+    this.onItemsChange(this.model.items);
   }
 
   onItemsChange = items => {
-    console.log(items);
-    this.view.renderTable(items);
+    this.view.updateView(items, this.model.balance);
   }
 
   onAddItem = item => {
@@ -163,4 +177,8 @@ function isValidAmount(num) {
 
 function generateID() {
   return Math.random().toString(36).substr(2, 9);
+}
+
+function formatBalance(balance) {
+  return `${balance >= 0 ? '' : '-'}$${Math.abs(balance).toFixed(2)}`;
 }

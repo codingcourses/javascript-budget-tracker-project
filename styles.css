@@ -19,7 +19,7 @@ button {
 
 .section-balance {
   position: relative;
-  background-color: #388E3C;
+  background-color: #616161;
   color: white;
   transition: background-color 1s ease-in-out;
   height: 300px;
