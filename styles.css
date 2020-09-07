@@ -4,6 +4,7 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
+  margin: 0;
 }
 
 /* Inherit fonts for buttons */
@@ -14,4 +15,26 @@ button {
 /* CUSTOM STYLES */
 #root {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.section-balance {
+  position: relative;
+  background-color: #388E3C;
+  color: white;
+  transition: background-color 1s ease-in-out;
+  height: 300px;
+  font-weight: 100;
+}
+
+.balance {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+}
+
+.section-input {
+  position: relative;
+  font-weight: 200;
 }
