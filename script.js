@@ -4,7 +4,23 @@
  * Manages the data of the application.
  */
 class Model {
-  constructor() {}
+  constructor() {
+    this.items = [];
+  }
+
+  addItem(item) {
+    this.items.push(item);
+    this.onChange(this.items);
+  }
+
+  deleteItem(index) {
+    this.items.splice(index, 1);
+    this.onChange(this.items);
+  }
+
+  bindOnChange(callback) {
+    this.onChange = callback;
+  }
 }
 
 /**
