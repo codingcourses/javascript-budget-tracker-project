@@ -13,9 +13,12 @@ class Model {
     this.onChange(this.items);
   }
 
-  deleteItem(index) {
-    this.items.splice(index, 1);
-    this.onChange(this.items);
+  deleteItem(id) {
+    const index = this.items.find(item => item.id === id);
+    if (index !== -1) {
+      this.items.splice(index, 1);
+      this.onChange(this.items);
+    }
   }
 
   bindOnChange(callback) {
@@ -29,7 +32,19 @@ class Model {
  * Visual representation of the model.
  */
 class View {
-  constructor() {}
+  constructor() {
+    this.balance = this.getElement('#balance');
+    this.amountInput = this.getElement('#amount');
+    this.descInput = this.getElement('#description');
+    this.typeInput = this.getElement('#type');
+    this.addButton = this.getElement('#add');
+    this.itemsTable = this.getElement('#items');
+  }
+
+  getElement(selector) {
+    const element = document.querySelector(selector);
+    return element;
+  }
 }
 
 /**
