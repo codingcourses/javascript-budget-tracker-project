@@ -45,7 +45,9 @@ class View {
     this.descInput = this.getElement('#description');
     this.typeInput = this.getElement('#type');
     this.addButton = this.getElement('#add');
-    this.itemsTable = this.getElement('#items');
+    this.itemsTable = this.getElement('#items-table');
+    this.itemsTableBody = this.getElement('#items');
+    this.emptyState = this.getElement('#empty-state');
   }
 
   getElement(selector) {
@@ -74,7 +76,7 @@ class View {
 
       UIkit.notification({
         message: '<span uk-icon=\'icon: check\'></span> Added new item!',
-        status: 'primary',
+        status: 'success',
         pos: 'top-left',
       });
     });
@@ -91,8 +93,28 @@ class View {
   }
 
   updateView(items, balance) {
+    // Update balance
+    this.balance.textContent = formatBalance(balance);
+    if (balance === 0) {
+      this.balanceSection.style.backgroundColor = '#616161';
+    } else if (balance > 0) {
+      this.balanceSection.style.backgroundColor = '#388E3C';
+    } else {
+      this.balanceSection.style.backgroundColor = '#D32F2F';
+    }
+
+    // Display empty state
+    if (!items.length) {
+      this.emptyState.style.display = 'block';
+      this.itemsTable.style.display = 'none';
+      return;
+    }
+
     // Update items table
-    this.itemsTable.innerHTML = '';
+    this.itemsTableBody.innerHTML = '';
+    this.itemsTable.style.display = 'table';
+    this.emptyState.style.display = 'none';
+
     for (const item of items) {
       const row = document.createElement('tr');
 
@@ -115,22 +137,17 @@ class View {
       deleteButton.addEventListener('click', () => {
         if (this.onDelete) {
           this.onDelete(item.id);
+          UIkit.notification({
+            message: '<span uk-icon=\'icon: trash\'></span> Deleted item!',
+            status: 'primary',
+            pos: 'top-left',
+          });
         }
       });
       colDelete.appendChild(deleteButton);
       row.appendChild(colDelete);
 
-      this.itemsTable.appendChild(row);
-    }
-
-    // Update balance
-    this.balance.textContent = formatBalance(balance);
-    if (balance === 0) {
-      this.balanceSection.style.backgroundColor = '#616161';
-    } else if (balance > 0) {
-      this.balanceSection.style.backgroundColor = '#388E3C';
-    } else {
-      this.balanceSection.style.backgroundColor = '#D32F2F';
+      this.itemsTableBody.appendChild(row);
     }
   }
 }

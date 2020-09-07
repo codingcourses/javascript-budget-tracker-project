@@ -42,3 +42,11 @@ button {
 .section-items {
   font-weight: 200;
 }
+
+.empty-state {
+  display: none;
+}
+
+.items-table {
+  display: none;
+}
