@@ -5,12 +5,13 @@
  */
 class Model {
   constructor() {
-    this.items = [];
+    this.items = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
   }
 
   addItem(item) {
     this.items.push(item);
     this.onChange(this.items);
+    this.saveData();
   }
 
   deleteItem(id) {
@@ -18,7 +19,12 @@ class Model {
     if (index !== -1) {
       this.items.splice(index, 1);
       this.onChange(this.items);
+      this.saveData();
     }
+  }
+
+  saveData() {
+    localStorage.setItem('items', JSON.stringify(this.items));
   }
 
   bindOnChange(callback) {
