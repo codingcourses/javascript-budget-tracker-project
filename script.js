@@ -56,6 +56,11 @@ class View {
   bindAddItem(handler) {
     this.addButton.addEventListener('click', event => {
       if (!this.amountInput.value.length || !this.descInput.value.length) {
+        UIkit.notification({
+          message: '<span uk-icon=\'icon: close\'></span> Incomplete item information.',
+          status: 'danger',
+          pos: 'top-left',
+        });
         return event.preventDefault();
       }
 
@@ -66,6 +71,12 @@ class View {
       };
 
       handler(item);
+
+      UIkit.notification({
+        message: '<span uk-icon=\'icon: check\'></span> Added new item!',
+        status: 'primary',
+        pos: 'top-left',
+      });
     });
   }
 
@@ -182,5 +193,3 @@ function generateID() {
 function formatBalance(balance) {
   return `${balance >= 0 ? '' : '-'}$${Math.abs(balance).toFixed(2)}`;
 }
-
-UIkit.notification({message: 'Notification message'})
