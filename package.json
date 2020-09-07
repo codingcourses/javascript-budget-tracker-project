@@ -1,0 +1,11 @@
+{
+  "name": "budget-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:codingcourses/javascript-budget-tracker-project.git",
+  "author": "Eric Liu <ericliu314@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "minify": "minify script.js > script.min.js && minify styles.css > styles.min.css"
+  }
+}
