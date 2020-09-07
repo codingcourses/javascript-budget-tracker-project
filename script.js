@@ -182,3 +182,5 @@ function generateID() {
 function formatBalance(balance) {
   return `${balance >= 0 ? '' : '-'}$${Math.abs(balance).toFixed(2)}`;
 }
+
+UIkit.notification({message: 'Notification message'})
