@@ -23,7 +23,7 @@
             <div>
               <div class="uk-inline">
                 <span class="uk-form-icon">$</span>
-                <input id="amount" class="uk-input" />
+                <input id="amount" class="uk-input" placeholder="123.45" />
               </div>
             </div>
             <div>
@@ -31,8 +31,8 @@
             </div>
             <div>
               <select id="type" class="uk-select">
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
               </select>
             </div>
             <div>
@@ -43,7 +43,7 @@
       </div>
       <div class="uk-section section-items">
         <div class="uk-container">
-          <table class="uk-table uk-table-middle uk-table-hover uk-table-divider uk-table-striped">
+          <table class="uk-table uk-table-middle uk-table-hover uk-table-divider">
             <thead>
                 <tr>
                     <th>Amount</th>
@@ -52,16 +52,7 @@
                     <th class="uk-width-small"></th>
                 </tr>
             </thead>
-            <tbody id="items">
-                <tr>
-                    <td>$100</td>
-                    <td>Sample text</td>
-                    <td>Income</td>
-                    <td>
-                      <a class="uk-icon-link" uk-icon="trash"></a>
-                    </td>
-                </tr>
-            </tbody>
+            <tbody id="items"></tbody>
           </table>
         </div>
       </div>
