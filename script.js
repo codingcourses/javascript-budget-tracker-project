@@ -85,6 +85,10 @@ class View {
         status: 'success',
         pos: 'top-left',
       });
+
+      this.amountInput.value = '';
+      this.descInput.value = '';
+      this.typeInput.selectedIndex = 0;
     });
   }
 
