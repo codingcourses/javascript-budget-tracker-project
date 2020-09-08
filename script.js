@@ -100,7 +100,7 @@ class View {
 
   updateView(items, balance) {
     // Update balance
-    this.balance.textContent = formatBalance(balance);
+    this.balance.textContent = formatMoney(balance);
     if (balance === 0) {
       this.balanceSection.style.backgroundColor = '#616161';
     } else if (balance > 0) {
@@ -125,7 +125,7 @@ class View {
       const row = document.createElement('tr');
 
       const colAmount = document.createElement('td');
-      colAmount.textContent = item.amount;
+      colAmount.textContent = formatMoney(item.amount);
       row.appendChild(colAmount);
 
       const colDesc = document.createElement('td');
@@ -213,6 +213,6 @@ function generateID() {
   return Math.random().toString(36).substr(2, 9);
 }
 
-function formatBalance(balance) {
-  return `${balance >= 0 ? '' : '-'}$${Math.abs(balance).toFixed(2)}`;
+function formatMoney(amount) {
+  return `${amount >= 0 ? '' : '-'}$${Math.abs(amount).toFixed(2)}`;
 }

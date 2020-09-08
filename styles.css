@@ -50,3 +50,7 @@ button {
 .items-table {
   display: none;
 }
+
+.uk-notification-message {
+  font-weight: 200;
+}
