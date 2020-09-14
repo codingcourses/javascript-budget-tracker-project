@@ -136,6 +136,10 @@ class View {
       colDesc.textContent = item.desc;
       row.appendChild(colDesc);
 
+      const colDateAdded = document.createElement('td');
+      colDateAdded.textContent = formatDate(item.dateAdded);
+      row.appendChild(colDateAdded);
+
       const colType = document.createElement('td');
       colType.textContent = item.type;
       row.appendChild(colType);
@@ -192,6 +196,7 @@ class Controller {
   onAddItem = item => {
     this.model.addItem({
       id: generateID(),
+      dateAdded: Date.now(),
       ...item,
     });
   };
@@ -219,4 +224,9 @@ function generateID() {
 
 function formatMoney(amount) {
   return `${amount >= 0 ? '' : '-'}$${Math.abs(amount).toFixed(2)}`;
+}
+
+function formatDate(d) {
+  const date = new Date(d);
+  return date.toLocaleString();
 }

@@ -54,3 +54,9 @@ button {
 .uk-notification-message {
   font-weight: 200;
 }
+
+.uk-input,
+.uk-button,
+.uk-select {
+  border-radius: 5px !important;
+}
