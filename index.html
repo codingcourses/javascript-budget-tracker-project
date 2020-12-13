@@ -18,52 +18,50 @@
   </head>
 
   <body>
-    <div id="root">
-      <div id="section-balance" class="uk-section section-balance">
-        <div id="balance" class="balance"></div>
-      </div>
-      <div class="uk-section section-input">
-        <div class="uk-position-center">
-          <div class="uk-grid uk-grid-small">
-            <div>
-              <div class="uk-inline">
-                <span class="uk-form-icon">$</span>
-                <input id="amount" class="uk-input" placeholder="XXX.XX" />
-              </div>
+    <div id="section-balance" class="uk-section section-balance">
+      <div id="balance" class="balance"></div>
+    </div>
+    <div class="uk-section section-input">
+      <div class="uk-position-center">
+        <div class="uk-grid uk-grid-small">
+          <div>
+            <div class="uk-inline">
+              <span class="uk-form-icon">$</span>
+              <input id="amount" class="uk-input" placeholder="XXX.XX" />
             </div>
-            <div>
-              <input id="description" class="uk-input" placeholder="Description" />
-            </div>
-            <div>
-              <select id="type" class="uk-select">
-                <option value="Income">Income</option>
-                <option value="Expense">Expense</option>
-              </select>
-            </div>
-            <div>
-              <button id="add" class="uk-button uk-button-primary">Add Item</button>
-            </div>
+          </div>
+          <div>
+            <input id="description" class="uk-input" placeholder="Description" />
+          </div>
+          <div>
+            <select id="type" class="uk-select">
+              <option value="Income">Income</option>
+              <option value="Expense">Expense</option>
+            </select>
+          </div>
+          <div>
+            <button id="add" class="uk-button uk-button-primary">Add Item</button>
           </div>
         </div>
       </div>
-      <div class="uk-section section-items">
-        <div id="empty-state" class="uk-text-large uk-position-center empty-state">
-          You have not yet added any income or expense items.
-        </div>
-        <div class="uk-container">
-          <table id="items-table" class="uk-table uk-table-middle uk-table-hover uk-table-divider items-table">
-            <thead>
-                <tr>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>Date Added</th>
-                    <th>Type</th>
-                    <th class="uk-width-small"></th>
-                </tr>
-            </thead>
-            <tbody id="items"></tbody>
-          </table>
-        </div>
+    </div>
+    <div class="uk-section section-items">
+      <div id="empty-state" class="uk-text-large uk-position-center empty-state">
+        You have not yet added any income or expense items.
+      </div>
+      <div class="uk-container">
+        <table id="items-table" class="uk-table uk-table-middle uk-table-hover uk-table-divider items-table">
+          <thead>
+              <tr>
+                  <th>Amount</th>
+                  <th>Description</th>
+                  <th>Date Added</th>
+                  <th>Type</th>
+                  <th class="uk-width-small"></th>
+              </tr>
+          </thead>
+          <tbody id="items"></tbody>
+        </table>
       </div>
     </div>
 
