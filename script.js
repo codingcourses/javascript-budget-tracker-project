@@ -98,7 +98,7 @@ class View {
 
   bindAmountInputValidation(handler) {
     this.amountInput.addEventListener('keyup', () => {
-      handler(amount);
+      handler(this.amountInput);
     });
   }
 
