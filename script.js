@@ -1,232 +1,235 @@
-/**
- * @class Model
- *
- * Manages the data of the application.
- */
 class Model {
+  #data;
+  #onChange;
+
   constructor() {
-    this.items = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
+    // { id, amount, desc, type, dateAdded }
+    this.#data = localStorage.getItem(LOCAL_STORAGE_KEY)
+      ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+      : [];
+    this.#onChange = () => {};
   }
 
   addItem(item) {
-    this.items.push(item);
-    this.onChange(this.items);
-    this.saveData();
+    this.#data.push({
+      id: uuidv4(),
+      dateAdded: Date.now(),
+      ...item,
+    });
+    this.#onChange(this.#data);
   }
 
   deleteItem(id) {
-    const index = this.items.find(item => item.id === id);
-    if (index !== -1) {
-      this.items.splice(index, 1);
-      this.onChange(this.items);
-      this.saveData();
+    const index = this.#data.find(item => item.id === id);
+    if (index === -1) {
+      return;
     }
+    this.#data.splice(index, 1);
+    this.#onChange(this.#data);
   }
 
-  saveData() {
-    localStorage.setItem('items', JSON.stringify(this.items));
+  save() {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.#data));
   }
 
-  bindOnChange(callback) {
-    this.onChange = callback;
+  bindOnChange(handler) {
+    this.#onChange = handler;
   }
 
   get balance() {
-    return this.items.reduce((acc, curr) => (
-      acc + (curr.type === 'Income' ? curr.amount : -curr.amount
-    )), 0);
+    return this.#data.reduce((acc, curr) => (
+      acc + (curr.type === 'Income' ? curr.amount : -curr.amount)
+    ), 0);
+  }
+
+  initialize() {
+    this.#onChange(this.#data);
   }
 }
 
-/**
- * @class View
- *
- * Visual representation of the model.
- */
 class View {
+  #balance;
+  #sectionBalance;
+  #amountInput;
+  #descInput;
+  #typeInput;
+  #addButton;
+  #itemsTable;
+  #itemsTableBody;
+  #emptyState;
+  #onDelete;
+
   constructor() {
-    this.balance = this.getElement('#balance');
-    this.balanceSection = this.getElement('#section-balance');
-    this.amountInput = this.getElement('#amount');
-    this.descInput = this.getElement('#description');
-    this.typeInput = this.getElement('#type');
-    this.addButton = this.getElement('#add');
-    this.itemsTable = this.getElement('#items-table');
-    this.itemsTableBody = this.getElement('#items');
-    this.emptyState = this.getElement('#empty-state');
+    this.#balance = View.getElement('#balance');
+    this.#sectionBalance = View.getElement('#section-balance');
+    this.#amountInput = View.getElement('#amount');
+    this.#descInput = View.getElement('#description');
+    this.#typeInput = View.getElement('#type');
+    this.#addButton = View.getElement('#add');
+    this.#itemsTable = View.getElement('#items-table');
+    this.#itemsTableBody = View.getElement('#items');
+    this.#emptyState = View.getElement('#empty-state');
+    this.#onDelete = () => {};
+
+    this.handleAmountValidation();
   }
 
-  getElement(selector) {
-    const element = document.querySelector(selector);
-    return element;
+  static getElement(selector) {
+    const elem = document.querySelector(selector);
+    return elem;
   }
 
   bindAddItem(handler) {
-    this.addButton.addEventListener('click', event => {
-      if (!this.amountInput.value.length || !this.descInput.value.length) {
+    this.#addButton.addEventListener('click', () => {
+      if (!this.#amountInput.value || !this.#descInput.value || !this.#typeInput.value) {
         UIkit.notification({
-          message: '<span uk-icon=\'icon: close\'></span> Incomplete item information.',
-          status: 'danger',
+          message: '<span uk-icon="icon: close"></span> Incomplete item information.',
+          status: 'warning',
           pos: 'top-left',
+          timeout: 2000,
         });
-        return event.preventDefault();
+        return;
       }
 
       const item = {
-        amount: Number(this.amountInput.value),
-        desc: this.descInput.value,
-        type: this.typeInput.value,
+        amount: Number(this.#amountInput.value) * 100,
+        desc: this.#descInput.value,
+        type: this.#typeInput.value,
       };
 
       handler(item);
 
+      this.#amountInput.value = '';
+      this.#descInput.value = '';
+      this.#typeInput.selectedIndex = 0;
+
       UIkit.notification({
-        message: '<span uk-icon=\'icon: check\'></span> Added new item!',
+        message: '<span uk-icon="icon: check"></span> Added new item!',
         status: 'success',
         pos: 'top-left',
+        timeout: 2000,
       });
-
-      this.amountInput.value = '';
-      this.descInput.value = '';
-      this.typeInput.selectedIndex = 0;
     });
   }
 
-  bindOnDelete(callback) {
-    this.onDelete = callback;
-  }
-
-  bindAmountInputValidation(handler) {
-    this.amountInput.addEventListener('keyup', () => {
-      handler(this.amountInput);
-    });
-  }
-
-  updateView(items, balance) {
-    // Update balance
-    this.balance.textContent = formatMoney(balance);
-    if (balance === 0) {
-      this.balanceSection.style.backgroundColor = '#616161';
-    } else if (balance > 0) {
-      this.balanceSection.style.backgroundColor = '#388E3C';
+  updateBalance(balance) {
+    this.#balance.textContent = formatMoney(balance);
+    if (balance > 0) {
+      this.#sectionBalance.style.background = 'linear-gradient(to bottom right, #1b5e20, #81c784)';
+    } else if (balance < 0) {
+      this.#sectionBalance.style.background = 'linear-gradient(to bottom right, #b71c1c, #e57373)';
     } else {
-      this.balanceSection.style.backgroundColor = '#D32F2F';
+      this.#sectionBalance.style.background = 'linear-gradient(to bottom right, #263238, #78909c)';
     }
+  }
 
-    // Display empty state
+  updateItems(items) {
     if (!items.length) {
-      this.emptyState.style.display = 'block';
-      this.itemsTable.style.display = 'none';
+      this.#emptyState.style.display = 'block';
+      this.#itemsTable.style.display = 'none';
       return;
     }
 
-    // Update items table
-    this.itemsTableBody.innerHTML = '';
-    this.itemsTable.style.display = 'table';
-    this.emptyState.style.display = 'none';
+    this.#emptyState.style.display = 'none';
+    this.#itemsTable.style.display = 'table';
+
+    this.#itemsTableBody.innerHTML = '';
 
     for (const item of items) {
       const row = document.createElement('tr');
 
       const colAmount = document.createElement('td');
       colAmount.textContent = formatMoney(item.amount);
-      row.appendChild(colAmount);
 
       const colDesc = document.createElement('td');
       colDesc.textContent = item.desc;
-      row.appendChild(colDesc);
 
       const colDateAdded = document.createElement('td');
       colDateAdded.textContent = formatDate(item.dateAdded);
-      row.appendChild(colDateAdded);
 
       const colType = document.createElement('td');
       colType.textContent = item.type;
-      row.appendChild(colType);
 
       const colDelete = document.createElement('td');
-      const deleteButton = document.createElement('a');
+      colDelete.setAttribute('class', 'col-delete');
+
+      const deleteButton = document.createElement('span');
       deleteButton.setAttribute('class', 'uk-icon-link');
       deleteButton.setAttribute('uk-icon', 'trash');
       deleteButton.addEventListener('click', () => {
-        if (this.onDelete) {
-          this.onDelete(item.id);
+        if (this.#onDelete) {
+          this.#onDelete(item.id);
           UIkit.notification({
-            message: '<span uk-icon=\'icon: trash\'></span> Deleted item!',
-            status: 'primary',
+            message: '<span uk-icon="icon: trash"></span> Deleted item!',
+            status: 'danger',
             pos: 'top-left',
+            timeout: 2000,
           });
         }
       });
-      colDelete.appendChild(deleteButton);
-      row.appendChild(colDelete);
 
-      this.itemsTableBody.appendChild(row);
+      colDelete.append(deleteButton);
+      row.append(colAmount, colDesc, colDateAdded, colType, colDelete);
+      this.#itemsTableBody.append(row);
     }
+  }
+
+  bindOnDelete(handler) {
+    this.#onDelete = handler;
+  }
+
+  handleAmountValidation() {
+    this.#amountInput.addEventListener('keyup', event => {
+      if (!isValidAmount(event.target.value)) {
+        event.target.value = event.target.value.slice(0, -1);
+      }
+    });
   }
 }
 
-/**
- * @class Controller
- *
- * Links the model and the view.
- *
- * @param model
- * @param view
- */
 class Controller {
+  #model;
+  #view;
+
   constructor(model, view) {
-    this.model = model;
-    this.view = view;
+    this.#model = model;
+    this.#view = view;
 
-    this.model.bindOnChange(this.onItemsChange);
+    this.#view.bindAddItem(this.onAddItem);
+    this.#view.bindOnDelete(this.onDeleteItem);
 
-    this.view.bindAddItem(this.onAddItem);
-    this.view.bindOnDelete(this.onDeleteItem);
-    this.view.bindAmountInputValidation(this.validateAmountInput);
+    this.#model.bindOnChange(this.onItemsChange);
 
     // Initialize
-    this.onItemsChange(this.model.items);
-  }
-
-  onItemsChange = items => {
-    this.view.updateView(items, this.model.balance);
+    this.#model.initialize();
   }
 
   onAddItem = item => {
-    this.model.addItem({
-      id: generateID(),
-      dateAdded: Date.now(),
-      ...item,
-    });
+    this.#model.addItem(item);
   };
 
-  onDeleteItem = id => {
-    this.model.deleteItem(id);
+  onItemsChange = items => {
+    this.#view.updateItems(items);
+    this.#view.updateBalance(this.#model.balance);
+    this.#model.save();
   };
 
-  validateAmountInput = amount => {
-    if (!isValidAmount(amount.value)) {
-      amount.value = amount.value.slice(0, -1);
-    }
-  };
+  onDeleteItem = id => this.#model.deleteItem(id);
 }
+
+const LOCAL_STORAGE_KEY = 'BudgetTrackerProject';
 
 const app = new Controller(new Model(), new View());
 
-function isValidAmount(num) {
-  return isFinite(num) && /^\d+((\.\d{1,2})?$)|(\.$)/.test(num);
-}
-
-function generateID() {
-  return Math.random().toString(36).substr(2, 9);
-}
-
 function formatMoney(amount) {
-  return `${amount >= 0 ? '' : '-'}$${Math.abs(amount).toFixed(2)}`;
+  return `${amount < 0 ? '-' : ''}$${Math.abs(amount / 100).toFixed(2)}`;
 }
 
-function formatDate(d) {
-  const date = new Date(d);
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
   return date.toLocaleString();
+}
+
+function isValidAmount(amountString) {
+  return isFinite(amountString) && /^\d+((\.\d{1,2})?$)|(\.$)/.test(amountString);
 }

@@ -8,63 +8,63 @@
     <title>Budget Tracker Project</title>
 
     <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.5/dist/css/uikit.min.css" />
 
     <!-- UIkit JS -->
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/js/uikit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.5/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.5/dist/js/uikit-icons.min.js"></script>
 
-    <link rel="stylesheet" href="styles.min.css" />
+    <!-- UUID JS -->
+    <script src="https://unpkg.com/uuid@latest/dist/umd/uuidv4.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <div id="section-balance" class="uk-section section-balance">
       <div id="balance" class="balance"></div>
     </div>
-    <div class="uk-section section-input">
-      <div class="uk-position-center">
-        <div class="uk-grid uk-grid-small">
-          <div>
-            <div class="uk-inline">
-              <span class="uk-form-icon">$</span>
-              <input id="amount" class="uk-input" placeholder="XXX.XX" />
-            </div>
+
+    <div class="uk-section section-inputs">
+      <div class="uk-grid uk-grid-small">
+        <div>
+          <div class="uk-inline">
+            <span class="uk-form-icon">$</span>
+            <input id="amount" class="uk-input" placeholder="XXXX.XX" />
           </div>
-          <div>
-            <input id="description" class="uk-input" placeholder="Description" />
-          </div>
-          <div>
-            <select id="type" class="uk-select">
-              <option value="Income">Income</option>
-              <option value="Expense">Expense</option>
-            </select>
-          </div>
-          <div>
-            <button id="add" class="uk-button uk-button-primary">Add Item</button>
-          </div>
+        </div>
+        <div>
+          <input id="description" class="uk-input" placeholder="Description" />
+        </div>
+        <div>
+          <select id="type" name="type" class="uk-select">
+            <option disabled selected value="">Select an option</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+          </select>
+        </div>
+        <div>
+          <button id="add" class="uk-button uk-button-primary">Add Item</button>
         </div>
       </div>
     </div>
+
     <div class="uk-section section-items">
-      <div id="empty-state" class="uk-text-large uk-position-center empty-state">
-        You have not yet added any income or expense items.
-      </div>
-      <div class="uk-container">
-        <table id="items-table" class="uk-table uk-table-middle uk-table-hover uk-table-divider items-table">
-          <thead>
-              <tr>
-                  <th>Amount</th>
-                  <th>Description</th>
-                  <th>Date Added</th>
-                  <th>Type</th>
-                  <th class="uk-width-small"></th>
-              </tr>
-          </thead>
-          <tbody id="items"></tbody>
-        </table>
-      </div>
+      <div id="empty-state" class="empty-state">You have not yet added any income or expense items.</div>
+      <table id="items-table" class="uk-table uk-table-middle uk-table-hover uk-table-divider">
+        <thead>
+          <tr>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Date Added</th>
+            <th>Type</th>
+            <th class="uk-width-small"></th>
+          </tr>
+        </thead>
+        <tbody id="items"></tbody>
+      </table>
     </div>
 
-    <script src="script.min.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

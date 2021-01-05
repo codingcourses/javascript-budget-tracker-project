@@ -1,58 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400');
+
 /* Set core body defaults */
 body {
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
-  margin: 0;
+  font-family: "Quicksand", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* Inherit fonts for buttons */
-button {
-  font: inherit;
+/* Override UIkit Styles */
+.uk-input, .uk-select, .uk-button {
+  border-radius: 0.35rem;
 }
 
-/* CUSTOM STYLES */
-.section-balance {
-  position: relative;
-  background-color: #616161;
-  color: white;
-  transition: background-color 1s ease-in-out;
-  height: 300px;
-  font-weight: 100;
-}
-
-.balance {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 4rem;
-}
-
-.section-input {
-  position: relative;
-  font-weight: 200;
-}
-
-.section-items {
-  font-weight: 200;
-}
-
-.empty-state {
-  display: none;
-}
-
-.items-table {
-  display: none;
+.uk-icon-link {
+  cursor: pointer;
 }
 
 .uk-notification-message {
-  font-weight: 200;
+  border-radius: 0.35rem;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
 }
 
-.uk-input,
-.uk-button,
-.uk-select {
-  border-radius: 5px !important;
+/* Budget Tracker Project Styles */
+.section-balance {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 8rem;
+  background: linear-gradient(to bottom right, #263238, #78909c);
+  border-bottom-left-radius: 4rem;
+  border-bottom-right-radius: 4rem;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
+}
+
+.balance {
+  font-weight: 300;
+  font-size: 4rem;
+  color: #fff;
+}
+
+.section-inputs {
+  display: flex;
+  justify-content: center;
+}
+
+.section-items {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.col-delete {
+  text-align: center;
+}
+
+.empty-state {
+  text-align: center;
+  font-size: 1.5rem;
 }
